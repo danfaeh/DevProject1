@@ -1,0 +1,32 @@
+.jumbotron {
+	height: 100px;
+}
+
+.gridContainer {
+	width: 100%;
+}
+
+.box {
+	border:solid;
+	position: relative;
+	display: inline-block;
+	width: 9%;
+	height: .9em;
+	left: 8%;
+/*	margin: 0 auto;
+*/	vertical-align: top;
+	font-size: 70px;
+	max-height: 149px;
+	text-align:center;
+/*	line-height: 2em;
+*/	background-color: gray;
+	margin: -2px;
+	padding: 0px;
+}
+
+/*this will hard code the path*/
+#box05, #box07, #box15, #box17, #box22, #box23, #box24, #box25, #box27, #box32, #box37, #box38, 
+#box39, #box42, #box49, #box52, #box55, #box56, #box57, #box59, #box62, #box63, #box64, #box65, 
+#box67, #box69, #box77, #box78, #box79 {
+	background-color: brown;
+}
