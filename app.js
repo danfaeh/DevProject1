@@ -17,6 +17,15 @@ function Player (money) {
 	this.money = money || 1000;
 }
 
+//this is the creater function for a new enemy
+function Enemy (name, health, speed) {
+	this.name = name;
+	this.speed = speed;
+	this.health = health || 100;
+
+	this.location = {};
+}
+
 //FUNCTION CALLS: n/a
 //the makeField function will initialize the values of the div's in the field.  This will be called
 //on load and will set a flag for what areas are buildable and what areas are a track (not buildable)
@@ -60,9 +69,104 @@ function onBoxClick (e) {
 
 }
 
-function initValues () {
-
+//FUNCTION CALLS: calledByEnemySpawner
+//this function is called when you spawn an enemy, this will take an argument that 
+//determines the amount of enemies
+function enemySpawner (numOfEnemies) {
+	//this is the number of enemies we're going to send in, it has a default value
+	var enemyQuantity = numOfEnemies || 2;
+	//a loop that will call the "calledByEnemySpawner" function ever .5 seconds, it 
+	//loops as many times as the enemy quantity
+	for (var i = 0; i < enemyQuantity; i++) {
+		window.setTimeout(calledByEnemySpawner, 500);
+	}
 }
+
+
+//this is the function that will control the enemy spawning behavior, 
+//it will take one argument, numOfEnemies, that determines how many enemies
+//there are.  This has a default of 15.  The enemies are a div on the #gridContainer
+//and the x/y is styled in this function.
+function calledByEnemySpawner () {
+	//grabs the container of all of the divs (the map)
+	var $stage = $('#gridContainer'), 
+		//sets a variable for the x coordinate, the % from left
+	     enemyX=47, 
+	     //sets a variable for the y coordinate, the % from top
+	     enemyY = 0;
+
+	//makes a new div can saves it in a variable, $enemy
+	var $enemy = $("<div></div>")
+		//gives $enemy the class "enemy"
+		.addClass("enemy")
+		//changes enemy's location on the grid through css here, more css styling
+		//is in the css file
+		.css({
+			//distance from top, the y coordinate
+			'top': enemyY + '%',
+			//distance from left, the x coordinate
+			'left': enemyX + '%'
+
+		//adds the enemy to the grid contrainer, $stage.  Makes it appear on the map	
+		}).appendTo($stage);
+		//this will move the enemy through the track
+		animateEnemy($enemy);
+}
+
+
+function animateEnemy(enemy){ 
+	//moves the enemy div over time to the exit
+	enemy.animate({
+		'top': '30%'
+	}, 3000);
+
+	enemy.animate({
+		'left': '20%'
+	}, 4000);
+
+	enemy.animate({
+		'top': '80%'
+	}, 5000);
+
+	enemy.animate({
+		'left': '47%'
+	}, 4000);
+
+	enemy.animate({
+		'top': '68%'
+	}, 2000);
+
+	enemy.animate({
+		'left': '65%'
+	}, 3000);
+
+	enemy.animate({
+		'top': '93%'
+	}, 3000);
+
+	enemy.animate({
+		'left': '83%'
+	}, 3000);
+
+	enemy.animate({
+		'top': '43%'
+	}, 5000);
+
+	enemy.animate({
+		'left': '65%'
+	}, 3000);
+
+	enemy.animate({
+		'top': '0%'
+	}, 4000);
+
+
+	console.log(enemy);
+}
+
+
+
+
 
 function enemyMovement () {
 

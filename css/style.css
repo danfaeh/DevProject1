@@ -2,8 +2,9 @@
 	height: 100px;
 }
 
-.gridContainer {
+#gridContainer {
 	width: 100%;
+	position: absolute;
 }
 
 .box {
@@ -22,6 +23,15 @@
 */	background-color: gray;
 	margin: -2px;
 	padding: 0px;
+}
+
+.enemy {
+	z-index: 1000;
+	background-color: black;
+	position: absolute;
+	height : 15px;
+	width : 15px;
+	border-radius:10px;
 }
 
 /*this is the coding to differential the track, this is grabbed and manipulated in JS*/
