@@ -24,9 +24,7 @@
 	padding: 0px;
 }
 
-/*this will hard code the path*/
-#box05, #box07, #box15, #box17, #box22, #box23, #box24, #box25, #box27, #box32, #box37, #box38, 
-#box39, #box42, #box49, #box52, #box55, #box56, #box57, #box59, #box62, #box63, #box64, #box65, 
-#box67, #box69, #box77, #box78, #box79 {
+/*this is the coding to differential the track, this is grabbed and manipulated in JS*/
+.track {
 	background-color: brown;
 }
