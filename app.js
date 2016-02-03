@@ -78,11 +78,11 @@ function enemySpawner (numOfEnemies) {
 	//a loop that will call the "calledByEnemySpawner" function ever .5 seconds, it 
 	//loops as many times as the enemy quantity
 	for (var i = 0; i < enemyQuantity; i++) {
-		window.setTimeout(calledByEnemySpawner, 500);
+		window.setTimeout(calledByEnemySpawner, 2000*i);
 	}
 }
 
-
+//FUNCTION CALLS: animateEnemy
 //this is the function that will control the enemy spawning behavior, 
 //it will take one argument, numOfEnemies, that determines how many enemies
 //there are.  This has a default of 15.  The enemies are a div on the #gridContainer
@@ -109,11 +109,14 @@ function calledByEnemySpawner () {
 
 		//adds the enemy to the grid contrainer, $stage.  Makes it appear on the map	
 		}).appendTo($stage);
+
 		//this will move the enemy through the track
 		animateEnemy($enemy);
 }
 
 
+//this will control the movement of the enemies through the track.  THIS IS HARD CODED FOR ONE TRACK.
+//It currently has an entrance spot and exit spot, when it ends it should not be visible.
 function animateEnemy(enemy){ 
 	//moves the enemy div over time to the exit
 	enemy.animate({
@@ -159,6 +162,7 @@ function animateEnemy(enemy){
 	enemy.animate({
 		'top': '0%'
 	}, 4000);
+
 
 
 	console.log(enemy);
