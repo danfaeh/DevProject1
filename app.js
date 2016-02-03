@@ -1,60 +1,62 @@
+//FUNCTION CALLS: makeField(); addOnClicks();
+//on load function
 $(function() {
+	//makeField will set values for the flag telling if the div is buildable
 	makeField();
+	//addOnClicks will initialize what happenes when you click on a grid box
 	addOnClicks();
+	//PlayerOne will build our player and  initialize the values for them
+	playerOne = new Player();
 });
 
+
+//this is the creater function for a new player
+function Player (money) {
+	//you can either pass in a value for player, mostly for testing, or the player will start with
+	//a default quantity of money
+	this.money = money || 1000;
+}
+
+//FUNCTION CALLS: n/a
+//the makeField function will initialize the values of the div's in the field.  This will be called
+//on load and will set a flag for what areas are buildable and what areas are a track (not buildable)
 function makeField () {
+
+	//this will give us an array of the elements with the track class
+	var track = $(".track").get();
+	//this will give us an array of the elements with the boxes class
+	var boxes = $(".box").get();
+
+	//we're iterating through all the boxes and setting their fillFlag to true, meaning they are all
+	//available to be built in.  This flag will be changed later on the track so they are not available
+	//to be built on
+	for (var x = 0; x < boxes.length; x++) {
+		boxes[x].fillFlag = true;
+	}
+	//we're iterating through all of the track classes and setting their fillFlag to false, this means
+	//we cannot build in them
+	for (var n = 0; n < track.length; n++) {
+		track[n].fillFlag = false;
+	}
 
 }
 
+//FUNCTION CALLS: onBoxClick
 //this is the basis of funcitonality on the grid, upon clicking any item in the grid this will
 //activate.  It will 
 function addOnClicks () {
-	//we're making the ariable boxNodeList from the querySelectorAll.  This returns a node list
+	//we're making the ariable boxes from the querySelectorAll.  This returns a node list
 	//and from the .box class
-	var boxNodeList = document.querySelectorAll(".box");
-	//we're looping through the nodelist and attributing an onclick event to all of them
-	for (var i = 0; i < boxNodeList.length; i++) {
-		
-		//initializes all boxes with fillFlag, which will be used to see if its available to
-		//place a tower on.  True == available, false == not available.  The track will be filled
-		//in onBoxClick array
-//		boxNodeList[i].fillFlag = true;
-
+	var boxes = $(".box").get();
+	//we're looping through the array and attributing an onclick event to all of them
+	for (var i = 0; i < boxes.length; i++) {
 		//upon clicking any box in the grid, the "onBoxClick" event is called
-		$(boxNodeList[i]).click(onBoxClick(e));
-
+		$(boxes[i]).click(onBoxClick);
 	}
 }
 
 
-//THIS IS NOT WORKING, YOU NEED TO MAKE AN OBJECT AND LINK THAT OBJECT TO EACH
-//ONE OF THE DIVS 
-
 function onBoxClick (e) {
-	//this will give us a nodelist of the 
-	var trackNL = document.querySelectorAll(".track");
-	var boxNodeList = document.querySelectorAll(".box");
-
-	//we're looping through the nodelist and attributing an onclick event to all of them
-	for (var i = 0; i < boxNodeList.length; i++) {
-		
-		//initializes all boxes with fillFlag, which will be used to see if its available to
-		//place a tower on.  True == available, false == not available.  The track will be filled
-		//in onBoxClick array
-		boxNodeList[i].fillFlag = true;
-	}
-		console.log(boxNodeList);
-
-
-	//loops through the boxes that will be the track and marks that they are occupied so no
-	//towers can build on there
-	for (var x = 0; x < trackNL.length; x++) {
-
-		trackNL[x].fillFlag = false;
-
-	}
-	console.log(trackNL);
 
 }
 
