@@ -18,12 +18,11 @@ function Player (money) {
 }
 
 //this is the creater function for a new enemy
-function Enemy (name, health, speed) {
-	this.name = name;
-	this.speed = speed;
+function Enemy (x, y, health) {
 	this.health = health || 100;
 
-	this.location = {};
+	this.x = x;
+	this.y = y;
 }
 
 //FUNCTION CALLS: n/a
@@ -62,6 +61,7 @@ function addOnClicks () {
 		//upon clicking any box in the grid, the "onBoxClick" event is called
 		$(boxes[i]).click(onBoxClick);
 	}
+
 }
 
 
@@ -75,7 +75,8 @@ function onBoxClick (e) {
 function enemySpawner (numOfEnemies) {
 	//this is the number of enemies we're going to send in, it has a default value
 	var enemyQuantity = numOfEnemies || 2;
-	//a loop that will call the "calledByEnemySpawner" function ever .5 seconds, it 
+
+	//a loop that will call the "calledByEnemySpawner" function over an interval of 2000*i, it 
 	//loops as many times as the enemy quantity
 	for (var i = 0; i < enemyQuantity; i++) {
 		window.setTimeout(calledByEnemySpawner, 2000*i);
@@ -96,6 +97,7 @@ function calledByEnemySpawner () {
 	     enemyY = 0;
 
 	//makes a new div can saves it in a variable, $enemy
+	// var enemy = new Enemy(); 
 	var $enemy = $("<div></div>")
 		//gives $enemy the class "enemy"
 		.addClass("enemy")
@@ -118,6 +120,11 @@ function calledByEnemySpawner () {
 //this will control the movement of the enemies through the track.  THIS IS HARD CODED FOR ONE TRACK.
 //It currently has an entrance spot and exit spot, when it ends it should not be visible.
 function animateEnemy(enemy){ 
+//ENEMY IS AN OBJECT
+	var enArr = [];
+	enArr.push(enemy);
+	console.log(enArr);
+
 	//moves the enemy div over time to the exit
 	enemy.animate({
 		'top': '30%'
@@ -169,18 +176,7 @@ function animateEnemy(enemy){
 }
 
 
-
-
-
-function enemyMovement () {
-
-}
-
 function towerAction () {
-
-}
-
-function gameFlow () {
 
 }
 
