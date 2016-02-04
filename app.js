@@ -9,6 +9,12 @@ $(function() {
 	playerOne = new Player();
 });
 
+//This is a global variable, bite me
+var trackArr = [$("#box05"),$("#box15"),$("#box25"),$("#box24"),$("#box23"),
+$("#box22"),$("#box32"),$("#box42"),$("#box52"),$("#box62"),$("#box63"),$("#box64"),$("#box65"),
+$("#box55"),$("#box56"),$("#box57"),$("#box67"),$("#box77"),$("#box78"),$("#box79"),$("#box69"),
+$("#box59"),$("#box49"),$("#box39"),$("#box38"),$("#box37"),$("#box27"),$("#box17"),$("#box07")];
+
 
 //this is the creater function for a new player
 function Player (money) {
@@ -64,7 +70,9 @@ function addOnClicks () {
 
 }
 
-
+//this will control what happens when you click the box, you'll likely be prompted to 
+//place a tower or not.  This will call fillCheck to determine if it is kosher to build 
+//here (not a track or already occupied)
 function onBoxClick (e) {
 
 }
@@ -90,14 +98,16 @@ function enemySpawner (numOfEnemies) {
 //and the x/y is styled in this function.
 function calledByEnemySpawner () {
 	//grabs the container of all of the divs (the map)
-	var $stage = $('#gridContainer'), 
+	var $stage = $('#box05'), 
 		//sets a variable for the x coordinate, the % from left
 	     enemyX=47, 
 	     //sets a variable for the y coordinate, the % from top
 	     enemyY = 0;
 
 	//makes a new div can saves it in a variable, $enemy
-	// var enemy = new Enemy(); 
+	var enemy = new Enemy();
+	enemy.x = enemyX;
+	enemy.y = enemyY; 
 	var $enemy = $("<div></div>")
 		//gives $enemy the class "enemy"
 		.addClass("enemy")
@@ -121,14 +131,34 @@ function calledByEnemySpawner () {
 //It currently has an entrance spot and exit spot, when it ends it should not be visible.
 function animateEnemy(enemy){ 
 //ENEMY IS AN OBJECT
-	var enArr = [];
-	enArr.push(enemy);
-	console.log(enArr);
+	console.log(enemy);
 
+	for (var i = 0; i < trackArr.length; i++) {
+		if (enemy.parent != $("#box79")) {
+			var boxPlace = trackArr[i].position();
+			var enemyLeft = boxPlace.left;
+			var enemyTop = boxPlace.top;
+			enemy.animate({
+				'left': enemyLeft - 540,
+				'top' : enemyTop + 20
+			}, 1000);
+			console.log(enemyTop);
+
+			trackArr[i].append(enemy);
+
+		}
+	}
+
+	//animate to change the location over time, THEN append to a new place
+
+
+/*
 	//moves the enemy div over time to the exit
 	enemy.animate({
 		'top': '30%'
 	}, 3000);
+	//set x and y
+	//have tower object scout for x and y, shoot if coordinates in range
 
 	enemy.animate({
 		'left': '20%'
@@ -170,7 +200,7 @@ function animateEnemy(enemy){
 		'top': '0%'
 	}, 4000);
 
-
+*/
 
 	console.log(enemy);
 }
