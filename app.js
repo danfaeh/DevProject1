@@ -115,9 +115,9 @@ function calledByEnemySpawner () {
 		//is in the css file
 		.css({
 			//distance from top, the y coordinate
-			'top': enemyY + '%',
+			'top': $("#box05").position().top+ 20,
 			//distance from left, the x coordinate
-			'left': enemyX + '%'
+			'left': $("#box05").position().left - 540
 
 		//adds the enemy to the grid contrainer, $stage.  Makes it appear on the map	
 		}).appendTo($stage);
@@ -130,27 +130,28 @@ function calledByEnemySpawner () {
 //this will control the movement of the enemies through the track.  THIS IS HARD CODED FOR ONE TRACK.
 //It currently has an entrance spot and exit spot, when it ends it should not be visible.
 function animateEnemy(enemy){ 
-//ENEMY IS AN OBJECT
-	console.log(enemy);
-
+	//this for loop will go through the array of track boxes and will append the enemy to them
+	//we get the box position then animate the movement of the player
 	for (var i = 0; i < trackArr.length; i++) {
+		//as long as the enemy isn't in the last block, keep functioning
 		if (enemy.parent != $("#box79")) {
+			//boxPlace will be the position of the box we're moving into
 			var boxPlace = trackArr[i].position();
+			//this is going to be the left and right positions of our enemy
 			var enemyLeft = boxPlace.left;
 			var enemyTop = boxPlace.top;
+			//here we animate the enemy to visually move from the current location to the next
+			//box over one second
 			enemy.animate({
+				//this moves to the center of the next box
 				'left': enemyLeft - 540,
 				'top' : enemyTop + 20
 			}, 1000);
-			console.log(enemyTop);
-
+			//this actually moves the enemy from one box to the next.  This is for accessibility later.
 			trackArr[i].append(enemy);
 
 		}
 	}
-
-	//animate to change the location over time, THEN append to a new place
-
 
 /*
 	//moves the enemy div over time to the exit
