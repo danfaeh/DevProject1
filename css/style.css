@@ -1,5 +1,17 @@
 .jumbotron {
-	height: 100px;
+	max-height: 40px;
+}
+
+.btn {
+}
+
+.tower {
+	z-index: 1000;
+	background-color: blue;
+	position: absolute;
+	height : 15px;
+	width : 15px;
+	border-radius:10px;
 }
 
 #gridContainer {

@@ -15,7 +15,6 @@ $("#box22"),$("#box32"),$("#box42"),$("#box52"),$("#box62"),$("#box63"),$("#box6
 $("#box55"),$("#box56"),$("#box57"),$("#box67"),$("#box77"),$("#box78"),$("#box79"),$("#box69"),
 $("#box59"),$("#box49"),$("#box39"),$("#box38"),$("#box37"),$("#box27"),$("#box17"),$("#box07")];
 
-
 //this is the creater function for a new player
 function Player (money) {
 	//you can either pass in a value for player, mostly for testing, or the player will start with
@@ -24,12 +23,22 @@ function Player (money) {
 }
 
 //this is the creater function for a new enemy
-function Enemy (x, y, health) {
+function Enemy (health) {
 	this.health = health || 100;
-
-	this.x = x;
-	this.y = y;
 }
+
+function Tower(damage, range) {
+	this.damage = damage;
+	this.range = range;
+}
+
+Tower.prototype = {
+	//this will determine if there is an enemy in range
+	inRange: function inRange() {
+
+	}
+
+};
 
 //FUNCTION CALLS: n/a
 //the makeField function will initialize the values of the div's in the field.  This will be called
@@ -55,7 +64,7 @@ function makeField () {
 
 }
 
-//FUNCTION CALLS: onBoxClick
+//FUNCTION CALLS: onBoxClick, enemySpawner
 //this is the basis of funcitonality on the grid, upon clicking any item in the grid this will
 //activate.  It will 
 function addOnClicks () {
@@ -68,13 +77,34 @@ function addOnClicks () {
 		$(boxes[i]).click(onBoxClick);
 	}
 
+	//this builds the start button, when it is clicked by players the game will spawn
+	//enemies that will move through the track.  This calls the "enemySpawner" function
+	$("#startBtn").on('click', function () {
+		enemySpawner();
+	});
+
+
 }
 
+//FUNCTION CALLS: Tower constructor
 //this will control what happens when you click the box, you'll likely be prompted to 
 //place a tower or not.  This will call fillCheck to determine if it is kosher to build 
 //here (not a track or already occupied)
 function onBoxClick (e) {
-
+	console.log(this);
+	var ans = confirm("Build here?");
+	if (ans === true && this.fillFlag) {
+		var tower = new Tower(20);
+		var $tower = $("<div></div>")
+			.addClass("tower")
+			.css({
+				'top': 38 + '%',
+				'left': 40 + '%'
+			});
+		$(this).append($tower);
+	} else if (ans === true && !(this.fillFlag)) {
+		alert("You can't build on the track or on a filled spot!");
+	}
 }
 
 //FUNCTION CALLS: calledByEnemySpawner
@@ -98,16 +128,10 @@ function enemySpawner (numOfEnemies) {
 //and the x/y is styled in this function.
 function calledByEnemySpawner () {
 	//grabs the container of all of the divs (the map)
-	var $stage = $('#box05'), 
-		//sets a variable for the x coordinate, the % from left
-	     enemyX=47, 
-	     //sets a variable for the y coordinate, the % from top
-	     enemyY = 0;
-
-	//makes a new div can saves it in a variable, $enemy
+	var $stage = $('#box05');
+	//constructor for a new Enemy
 	var enemy = new Enemy();
-	enemy.x = enemyX;
-	enemy.y = enemyY; 
+	//makes a new div can saves it in a variable, $enemy
 	var $enemy = $("<div></div>")
 		//gives $enemy the class "enemy"
 		.addClass("enemy")
@@ -115,7 +139,7 @@ function calledByEnemySpawner () {
 		//is in the css file
 		.css({
 			//distance from top, the y coordinate
-			'top': $("#box05").position().top+ 20,
+			'top': $("#box05").position().top + 20,
 			//distance from left, the x coordinate
 			'left': $("#box05").position().left - 540
 
@@ -205,6 +229,8 @@ function animateEnemy(enemy){
 
 	console.log(enemy);
 }
+
+
 
 
 function towerAction () {
