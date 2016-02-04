@@ -27,9 +27,10 @@ function Enemy (health) {
 	this.health = health || 100;
 }
 
-function Tower(damage, range) {
-	this.damage = damage;
-	this.range = range;
+function Tower(damage, cost, range) {
+	this.damage = damage || 20;
+	this.cost = cost || 20;
+	this.range = range || 1;
 }
 
 Tower.prototype = {
@@ -91,19 +92,35 @@ function addOnClicks () {
 //place a tower or not.  This will call fillCheck to determine if it is kosher to build 
 //here (not a track or already occupied)
 function onBoxClick (e) {
-	console.log(this);
+	console.log(this.fillFlag);
+	//this is a crude way of asking the user if they want to build a tower
 	var ans = confirm("Build here?");
-	if (ans === true && this.fillFlag) {
-		var tower = new Tower(20);
+	//if the user confirms the above, the space isn't filled, and the player
+	//has sufficient money to pay for the tower
+	if (ans === true && this.fillFlag && playerOne.money >= 200) {
+		//we make a new tower with 20 dmg and 200 cost
+		var tower = new Tower(20, 200);
+		//we're using jquery to add a div that we will use as our DOM tower element
 		var $tower = $("<div></div>")
+			//giving the DOM element the class "tower"
 			.addClass("tower")
+			//here's the positioning of the tower within the grid div
 			.css({
 				'top': 38 + '%',
 				'left': 40 + '%'
 			});
+		//this will append the div we made above onto the grid div that the user selected
 		$(this).append($tower);
+		//removes the cost of the tower from the user
+		playerOne.money -= tower.cost;
+		//marks the grid div as occupied
+		this.fillFlag = false;
+		//alerts the user if the spot they tried to build on is a track or occupied
 	} else if (ans === true && !(this.fillFlag)) {
 		alert("You can't build on the track or on a filled spot!");
+		//alerts the user that they dont have the cash money to buy a tower, yo.
+	} else if (ans === true && playerOne.money < 200) {
+		alert("You don't have the cash money for that, yo");
 	}
 }
 
