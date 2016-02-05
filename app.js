@@ -9,6 +9,7 @@ $(function() {
 	playerOne = new Player();
 });
 
+//a global counter for how many enemies have been made
 var enemyCounter = 0;
 
 //This is a global variable, bite me
@@ -26,10 +27,11 @@ function Player (money) {
 
 //this is the creater function for a new enemy
 function Enemy (health) {
+	//this is the total enemy health, currently  not in use
 	this.health = health || 100;
 }
 
-//tower constructor
+//tower constructor, takes four arguments
 function Tower(damage, cost, x, y) {
 	this.damage = damage || 20;
 	this.cost = cost || 200;
@@ -41,23 +43,63 @@ Tower.prototype = {
 	//this will determine if there is an enemy in range
 	shoot: function shoot() {
 		//console.log(this.parent());
-		var rangeArr = $(this).parent();
-		console.log(rangeArr);
-		console.log(Math.abs(this.x - $("#enemy0").position().left));
-		if ((Math.abs(this.x - $("#enemy0").position().left) < 10) && 
-				(this.y - $("#enemy0").position().top) < 10) {
+		//console.log($enemy);
+		var theTower = this;
+
+		var towerX = this.x;
+		var towerY = this.y;
+
+		//console.log("tower x:", towerX, "and tower Y:", towerY);
+		var enX = $(".enemy").first().position().left;
+		var enY = $(".enemy").first().position().top;
+
+		var xDif = Math.abs($(".enemy").first().position().left - towerX);
+ 		var yDif = Math.abs($(".enemy").first().position().top - towerY);
+
+		// var d = Math.floor(Math.sqrt((Math.pow((this.x-
+		// 				$(".enemy").first().position().left),2) * 0.5) + 
+		// 				((Math.pow((this.y-$(".enemy").first().position().top),2) * 2))));
+		
+		// console.log("x coord:", xDif);
+		// console.log("y coord:", yDif);
+
+		var d = Math.floor(
+			Math.sqrt(
+				(Math.pow((xDif),2)  ) + ((Math.pow((yDif),2) ))
+			)
+		);
+		console.log(d);
+		// console.log(d);
+		// console.log(Math.abs(towerX - $(".enemy").first().position().left));
+		// console.log(Math.abs(this.y - $(".enemy").first().position().top));
+		
 
 
-			enemy.health -= this.damage;
-			var theTower = this;
+		if (d > 600 && d < 700) {
+			console.log("bang");
+			// let the enemy live, FOR NOW!
+			$(".enemy").first().remove();
+			playerOne.money += 100;
 			window.setTimeout(function () {
 				towerShootsShit(theTower);
-			}, 2500);
+			}, 2000);
+
+		// if ($(this).parent() == $("#box14") && ($(".enemy").first().position().left < -137 && $(".enemy").first().position().left > -290) && 
+		// 	($(".enemy").first().position().top < 138 && $(".enemy").first().position().top > 20)) {
+
+			// console.log("bang");
+		 // 	$(".enemy").first().remove();
+		 // 	playerOne.money += 100;
+		 // 	window.setTimeout(function () {
+		 // 		towerShootsShit(theTower);
+		 // 	}, 2000);
+		} else {
+			window.setTimeout(function () {
+				towerShootsShit(theTower);
+			}, 2000);
 		}
 		
 	}
-
-
 };
 
 /*FUNCTION CALLS: n/a
@@ -105,6 +147,56 @@ function addOnClicks () {
 	});
 }
 
+//FUNCTION CALLS: calledByEnemySpawner
+//this function is called when you spawn an enemy, this will take an argument that 
+//determines the amount of enemies
+function enemySpawner (numOfEnemies) {
+	//this is the number of enemies we're going to send in, it has a default value
+	var enemyQuantity = numOfEnemies || 1;
+
+	//a loop that will call the "calledByEnemySpawner" function over an interval of 2000*i, it 
+	//loops as many times as the enemy quantity
+	for (var i = 0; i < enemyQuantity; i++) {
+		window.setTimeout(calledByEnemySpawner, 2000*i);
+	}
+
+	towerShootsShit($(tower));
+}
+
+//FUNCTION CALLS: animateEnemy
+//this is the function that will control the enemy spawning behavior, 
+//it will take one argument, numOfEnemies, that determines how many enemies
+//there are.  This has a default of 15.  The enemies are a div on the #gridContainer
+//and the x/y is styled in this function.
+function calledByEnemySpawner () {
+	//grabs the container of all of the divs (the map)
+	var $stage = $('#box05');
+	//constructor for a new Enemy
+	$enemy = new Enemy();
+	//console.log($enemy.health);
+	//makes a new div can saves it in a variable, $enemy
+	$enemy = $("<div></div>")
+		//gives $enemy the class "enemy"
+		.addClass("enemy")
+		.attr('id', "enemy" + enemyCounter)
+		//changes enemy's location on the grid through css here, more css styling
+		//is in the css file
+		.css({
+			//distance from top, the y coordinate
+			'top': $("#box05").position().top + 20,
+			//distance from left, the x coordinate
+			'left': $("#box05").position().left - 540
+
+		//adds the enemy to the grid contrainer, $stage.  Makes it appear on the map	
+		}).appendTo($stage);
+		enemyCounter++;
+		//console.log($enemy);
+
+		//this will move the enemy through the track
+		animateEnemy($enemy);
+
+}
+
 //FUNCTION CALLS: Tower constructor
 //this will control what happens when you click the box, you'll likely be prompted to 
 //place a tower or not.  This will call fillCheck to determine if it is kosher to build 
@@ -128,6 +220,7 @@ function onBoxClick (e) {
 				'left': 30 + 'px'
 			});
 		//this will append the div we made above onto the grid div that the user selected
+		console.log(this);
 		$(this).append($tower);
 
 		//we make a new tower with 20 dmg and 200 cost
@@ -152,52 +245,6 @@ function onBoxClick (e) {
 	}
 }
 
-//FUNCTION CALLS: calledByEnemySpawner
-//this function is called when you spawn an enemy, this will take an argument that 
-//determines the amount of enemies
-function enemySpawner (numOfEnemies) {
-	//this is the number of enemies we're going to send in, it has a default value
-	var enemyQuantity = numOfEnemies || 1;
-
-	//a loop that will call the "calledByEnemySpawner" function over an interval of 2000*i, it 
-	//loops as many times as the enemy quantity
-	for (var i = 0; i < enemyQuantity; i++) {
-		window.setTimeout(calledByEnemySpawner, 2000*i);
-	}
-}
-
-//FUNCTION CALLS: animateEnemy
-//this is the function that will control the enemy spawning behavior, 
-//it will take one argument, numOfEnemies, that determines how many enemies
-//there are.  This has a default of 15.  The enemies are a div on the #gridContainer
-//and the x/y is styled in this function.
-function calledByEnemySpawner () {
-	//grabs the container of all of the divs (the map)
-	var $stage = $('#box05');
-	//constructor for a new Enemy
-	enemy = new Enemy();
-	//makes a new div can saves it in a variable, $enemy
-	var $enemy = $("<div></div>")
-		//gives $enemy the class "enemy"
-		.addClass("enemy")
-		.attr('id', "enemy" + enemyCounter)
-		//changes enemy's location on the grid through css here, more css styling
-		//is in the css file
-		.css({
-			//distance from top, the y coordinate
-			'top': $("#box05").position().top + 20,
-			//distance from left, the x coordinate
-			'left': $("#box05").position().left - 540
-
-		//adds the enemy to the grid contrainer, $stage.  Makes it appear on the map	
-		}).appendTo($stage);
-		enemyCounter++;
-		console.log($enemy);
-
-		//this will move the enemy through the track
-		animateEnemy($enemy);
-
-}
 
 //FUNCTION CALLS: n/a
 //this will control the movement of the enemies through the track.  THIS IS HARD CODED FOR ONE TRACK.
@@ -224,11 +271,12 @@ function animateEnemy(enemy){
 
 	}
 
-
-	console.log($("#enemy0").position().left);
-	console.log($("#enemy0").position().top);
+	var y = "enemy" + enemyCounter;
+	console.log($(y));
+	console.log($(y).position());
 	if ($(".enemy").position().left == 28.4375 && $(".enemy").position().top == 20) {
 		console.log("here");
+		$(".enemy").remove();
 		//when top and left = specific coordinates,
 		//$(".enemy").remove();
 	}
@@ -238,16 +286,13 @@ function animateEnemy(enemy){
 //makes the tower shoot shit
 function towerShootsShit (tower) {
 	tower.shoot();
-	if (enemy.health === 0) {
-		$("#enemy0").remove();
+	if ($enemy.health === 0) {
+		console.log("bang");
+		$(".enemy").first().remove();
 	}
 }
 
-function checkSurroundings () {
 
-
-
-}
 
 
 
