@@ -50,3 +50,17 @@
 .track {
 	background-color: brown;
 }
+
+#scoreBoard {
+  float: right;
+  height: 50px;
+  width: 200px;
+  margin-right: 150px;
+  border: 2px solid black;
+  text-align: center;
+}
+
+#playerOneScore {
+	width: 80px;
+  padding-right: 20px;
+}

@@ -7,6 +7,8 @@ $(function() {
 	addOnClicks();
 	//PlayerOne will build our player and  initialize the values for them
 	playerOne = new Player();
+
+	updateScoreBoard();
 });
 
 //a global counter for how many enemies have been made
@@ -80,6 +82,7 @@ Tower.prototype = {
 			// let the enemy live, FOR NOW!
 			$(".enemy").first().remove();
 			playerOne.money += 100;
+			updateScoreBoard();
 			window.setTimeout(function () {
 				towerShootsShit(theTower);
 			}, 2000);
@@ -232,6 +235,7 @@ function onBoxClick (e) {
 
 		//removes the cost of the tower from the user
 		playerOne.money -= tower.cost;
+		updateScoreBoard();
 		//marks the grid div as occupied
 		this.fillFlag = false;
 		//alerts the user if the spot they tried to build on is a track or occupied
@@ -293,8 +297,9 @@ function towerShootsShit (tower) {
 }
 
 
-
-
+function updateScoreBoard(){
+	$('#playerOneScore').html('$'+playerOne.money);
+}
 
 
 
